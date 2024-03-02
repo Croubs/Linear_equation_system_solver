@@ -21,7 +21,7 @@ custom_matrix <- function(n) {
 
   for (i in 1:n) {
     for (j in 1:n) {
-      prompt = paste("Enter the [", i, ",", j, "] number: ")
+      prompt <- paste("Enter the [", i, ",", j, "] number: ")
       item <- readline(prompt = prompt)
       
       outMatrix[i,j] <- as.numeric(item)
@@ -29,5 +29,26 @@ custom_matrix <- function(n) {
   }
   
   outMatrix
+}
+
+inverse_matrix <- function(n, custom_matrix) {
+  identity <- identity_matrix(n)
+  
+  for (i in 1:n) {
+    pivot <- custom_matrix[i,i]
+    custom_matrix[i,] <- custom_matrix[i,] / pivot
+    identity[i,] <- identity[i,] / pivot
+
+    for (j in 1:n) {
+      if (j != i) {
+        item_in_pivot_column <- custom_matrix[j,i]
+
+        custom_matrix[j,] <- custom_matrix[j,] - (custom_matrix[i,] * item_in_pivot_column)
+        identity[j,] <- identity[j,] - (identity[i,] * item_in_pivot_column)
+      }
+    }
+  }
+
+  identity
 }
 
