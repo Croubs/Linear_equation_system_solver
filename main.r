@@ -67,6 +67,13 @@ values_matrix <- function(n) {
   outMatrix
 }
 
+# Function to calculate the equations solutions
+solutions_matrix <- function(inverse, values) {
+  solutions_matrix <- inverse %*% values
+
+  solutions_matrix
+}
+
 res <- readline(prompt = "Enter the n value for nxn matrix: ")
 n <- as.numeric(res)
 
@@ -74,6 +81,6 @@ custom <- custom_matrix(n)
 inverse <- inverse_matrix(n, custom)
 values <- values_matrix(n)
 
-solutions <- inverse %*% values
+solutions <- solutions_matrix(inverse, values)
 print("Matrix with solutions:")
 print(solutions)
