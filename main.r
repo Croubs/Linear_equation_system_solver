@@ -15,3 +15,19 @@ identity_matrix <- function(n) {
   outMatrix
 }
 
+# Function to create a matrix with user provided values
+custom_matrix <- function(n) {
+  outMatrix <- matrix(0, nrow = n, ncol = n)
+
+  for (i in 1:n) {
+    for (j in 1:n) {
+      prompt = paste("Enter the [", i, ",", j, "] number: ")
+      item <- readline(prompt = prompt)
+      
+      outMatrix[i,j] <- as.numeric(item)
+    }
+  }
+  
+  outMatrix
+}
+
