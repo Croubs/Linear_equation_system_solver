@@ -31,6 +31,7 @@ custom_matrix <- function(n) {
   outMatrix
 }
 
+# Function to calculate an inverse matrix
 inverse_matrix <- function(n, custom_matrix) {
   identity <- identity_matrix(n)
   
@@ -52,3 +53,27 @@ inverse_matrix <- function(n, custom_matrix) {
   identity
 }
 
+# Function to create the vector of equations values
+values_matrix <- function(n) {
+  outMatrix <- matrix(0, nrow = n, ncol = 1)
+
+  for (i in 1:n) {
+    prompt <- paste("Enter the value of the ", i," equation: ")
+    item <- readline(prompt = prompt)
+    
+    outMatrix[i,1] <- as.numeric(item)
+  }
+
+  outMatrix
+}
+
+res <- readline(prompt = "Enter the n value for nxn matrix: ")
+n <- as.numeric(res)
+
+custom <- custom_matrix(n)
+inverse <- inverse_matrix(n, custom)
+values <- values_matrix(n)
+
+solutions <- inverse %*% values
+print("Matrix with solutions:")
+print(solutions)
