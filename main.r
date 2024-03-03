@@ -1,5 +1,5 @@
 # Function to create an identity matrix
-identity_matrix <- function(n) {
+create_identity_matrix <- function(n) {
   outMatrix <- matrix(0, nrow = n, ncol = n)
 
   for (i in 1:n) {
@@ -16,7 +16,7 @@ identity_matrix <- function(n) {
 }
 
 # Function to create a matrix with user provided values
-custom_matrix <- function(n) {
+create_custom_matrix <- function(n) {
   outMatrix <- matrix(0, nrow = n, ncol = n)
 
   for (i in 1:n) {
@@ -32,29 +32,51 @@ custom_matrix <- function(n) {
 }
 
 # Function to calculate an inverse matrix
-inverse_matrix <- function(n, custom_matrix) {
-  identity <- identity_matrix(n)
+calculate_inverse_matrix <- function(n, custom_matrix) {
+  identity_matrix <- create_identity_matrix(n)
+
+  # Reorder the matrix rows
+  for (i in 1:n) {
+    if (custom_matrix[i,i] == 0) {
+      for (j in 1:n) {
+        if (custom_matrix[j,i] != 0 && custom_matrix[i,j] != 0) {
+          # Reorder the custom matrix rows
+          aux <- custom_matrix[j,]
+          custom_matrix[j,] <- custom_matrix[i,]
+          custom_matrix[i,] <- aux
+
+          # Reorder the identity matrix rows
+          aux_i <- identity_matrix[j,]
+          identity_matrix[j,] <- identity_matrix[i,]
+          identity_matrix[i,] <- aux_i
+
+          break
+        }
+      }
+    }
+  }
   
+  # Calculate the inverse
   for (i in 1:n) {
     pivot <- custom_matrix[i,i]
     custom_matrix[i,] <- custom_matrix[i,] / pivot
-    identity[i,] <- identity[i,] / pivot
+    identity_matrix[i,] <- identity_matrix[i,] / pivot
 
     for (j in 1:n) {
       if (j != i) {
         item_in_pivot_column <- custom_matrix[j,i]
 
         custom_matrix[j,] <- custom_matrix[j,] - (custom_matrix[i,] * item_in_pivot_column)
-        identity[j,] <- identity[j,] - (identity[i,] * item_in_pivot_column)
+        identity_matrix[j,] <- identity_matrix[j,] - (identity_matrix[i,] * item_in_pivot_column)
       }
     }
   }
 
-  identity
+  identity_matrix
 }
 
 # Function to create the vector of equations values
-values_matrix <- function(n) {
+create_values_matrix <- function(n) {
   outMatrix <- matrix(0, nrow = n, ncol = 1)
 
   for (i in 1:n) {
@@ -68,7 +90,7 @@ values_matrix <- function(n) {
 }
 
 # Function to calculate the equations solutions
-solutions_matrix <- function(inverse, values) {
+calculate_solutions_matrix <- function(inverse, values) {
   solutions_matrix <- inverse %*% values
 
   solutions_matrix
@@ -77,10 +99,12 @@ solutions_matrix <- function(inverse, values) {
 res <- readline(prompt = "Enter the n value for nxn matrix: ")
 n <- as.numeric(res)
 
-custom <- custom_matrix(n)
-inverse <- inverse_matrix(n, custom)
-values <- values_matrix(n)
+custom <- create_custom_matrix(n)
+inverse <- calculate_inverse_matrix(n, custom)
+values <- create_values_matrix(n)
 
-solutions <- solutions_matrix(inverse, values)
-print("Matrix with solutions:")
+solutions <- calculate_solutions_matrix(inverse, values)
+
+print(custom)
+print(values)
 print(solutions)
