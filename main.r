@@ -39,6 +39,13 @@ calculate_inverse_matrix <- function(n, custom_matrix) {
   for (i in 1:n) {
     pivot <- custom_matrix[i,i]
 
+    # If pivot is nan is because the system has no solution
+    # Beacause there was no number but 0 to put in the principal diagonal
+    # So it produces a number/0 error so pivot becomes number/0 -> NaN
+    if (is.nan(pivot)) {
+      stop("The system has no solutions")
+    }
+
     # Move the 0 from the principal diagonal
     if (pivot == 0) {
       for (j in (i+1):n) {
@@ -101,8 +108,8 @@ res <- readline(prompt = "Enter the n value for nxn matrix: ")
 n <- as.numeric(res)
 
 custom <- create_custom_matrix(n)
-inverse <- calculate_inverse_matrix(n, custom)
 values <- create_values_matrix(n)
+inverse <- calculate_inverse_matrix(n, custom)
 
 solutions <- calculate_solutions_matrix(inverse, values)
 
