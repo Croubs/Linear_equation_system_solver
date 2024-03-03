@@ -12,7 +12,7 @@ create_identity_matrix <- function(n) {
     }
   }
 
-  outMatrix
+  return(outMatrix)
 }
 
 # Function to create a matrix with user provided values
@@ -28,18 +28,21 @@ create_custom_matrix <- function(n) {
     }
   }
   
-  outMatrix
+  return(outMatrix)
 }
 
 # Function to calculate an inverse matrix
 calculate_inverse_matrix <- function(n, custom_matrix) {
   identity_matrix <- create_identity_matrix(n)
-
-  # Reorder the matrix rows
+  
+  # Calculate the inverse
   for (i in 1:n) {
-    if (custom_matrix[i,i] == 0) {
-      for (j in 1:n) {
-        if (custom_matrix[j,i] != 0 && custom_matrix[i,j] != 0) {
+    pivot <- custom_matrix[i,i]
+
+    # Move the 0 from the principal diagonal
+    if (pivot == 0) {
+      for (j in (i+1):n) {
+        if (custom_matrix[j,i] != 0) {
           # Reorder the custom matrix rows
           aux <- custom_matrix[j,]
           custom_matrix[j,] <- custom_matrix[i,]
@@ -54,10 +57,8 @@ calculate_inverse_matrix <- function(n, custom_matrix) {
         }
       }
     }
-  }
-  
-  # Calculate the inverse
-  for (i in 1:n) {
+
+    # Operate rows
     pivot <- custom_matrix[i,i]
     custom_matrix[i,] <- custom_matrix[i,] / pivot
     identity_matrix[i,] <- identity_matrix[i,] / pivot
@@ -72,7 +73,7 @@ calculate_inverse_matrix <- function(n, custom_matrix) {
     }
   }
 
-  identity_matrix
+  return(identity_matrix)
 }
 
 # Function to create the vector of equations values
@@ -86,14 +87,14 @@ create_values_matrix <- function(n) {
     outMatrix[i,1] <- as.numeric(item)
   }
 
-  outMatrix
+  return(outMatrix)
 }
 
 # Function to calculate the equations solutions
 calculate_solutions_matrix <- function(inverse, values) {
   solutions_matrix <- inverse %*% values
 
-  solutions_matrix
+  return(solutions_matrix)
 }
 
 res <- readline(prompt = "Enter the n value for nxn matrix: ")
