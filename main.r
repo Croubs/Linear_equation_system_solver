@@ -36,11 +36,15 @@ sistemEquations<- function() {
     
     # Function to calculate an inverse matrix
     calculate_inverse_matrix <- function(n, custom_matrix) {
+      # Get the identity matrix
       identity_matrix <- create_identity_matrix(n)
-      
+      # Create the aumented matrix
+      aumented_matrix <- matrix(c(custom_matrix, identity_matrix), nrow=n, ncol=(2*n))
+
+            
       # Calculate the inverse
       for (i in 1:n) {
-        pivot <- custom_matrix[i,i]
+        pivot <- aumented_matrix[i,i]
         
         # If pivot is nan is because the system has no solution
         # Beacause there was no number but 0 to put in the principal diagonal
@@ -52,16 +56,11 @@ sistemEquations<- function() {
         # Move the 0 from the principal diagonal
         if (pivot == 0) {
           for (j in (i+1):n) {
-            if (custom_matrix[j,i] != 0) {
+            if (aumented_matrix[j,i] != 0) {
               # Reorder the custom matrix rows
-              aux <- custom_matrix[j,]
-              custom_matrix[j,] <- custom_matrix[i,]
-              custom_matrix[i,] <- aux
-              
-              # Reorder the identity matrix rows
-              aux_i <- identity_matrix[j,]
-              identity_matrix[j,] <- identity_matrix[i,]
-              identity_matrix[i,] <- aux_i
+              aux <- aumented_matrix[j,]
+              aumented_matrix[j,] <- aumented_matrix[i,]
+              aumented_matrix[i,] <- aux
               
               break
             }
@@ -69,21 +68,19 @@ sistemEquations<- function() {
         }
         
         # Operate rows
-        pivot <- custom_matrix[i,i]
-        custom_matrix[i,] <- custom_matrix[i,] / pivot
-        identity_matrix[i,] <- identity_matrix[i,] / pivot
+        pivot <- aumented_matrix[i,i]
+        aumented_matrix[i,] <- aumented_matrix[i,] / pivot
         
         for (j in 1:n) {
           if (j != i) {
-            item_in_pivot_column <- custom_matrix[j,i]
+            item_in_pivot_column <- aumented_matrix[j,i]
             
-            custom_matrix[j,] <- custom_matrix[j,] - (custom_matrix[i,] * item_in_pivot_column)
-            identity_matrix[j,] <- identity_matrix[j,] - (identity_matrix[i,] * item_in_pivot_column)
+            aumented_matrix[j,] <- aumented_matrix[j,] - (aumented_matrix[i,] * item_in_pivot_column)
           }
         }
       }
       
-      return(identity_matrix)
+      return(aumented_matrix[1:n, (n+1):(2*n)])
     }
     
     # Function to create the vector of equations values
