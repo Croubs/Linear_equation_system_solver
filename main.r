@@ -57,25 +57,36 @@ sistemEquations<- function() {
         if (pivot == 0) {
           for (j in (i+1):n) {
             if (aumented_matrix[j,i] != 0) {
-              # Reorder the custom matrix rows
+              # Reorder the aumented matrix rows
               aux <- aumented_matrix[j,]
               aumented_matrix[j,] <- aumented_matrix[i,]
               aumented_matrix[i,] <- aux
               
+              # Show the move
+              print(aumented_matrix)
+
               break
             }
           }
         }
         
-        # Operate rows
+        # Operate the row to produce an 1 in the principal diagonal
         pivot <- aumented_matrix[i,i]
         aumented_matrix[i,] <- aumented_matrix[i,] / pivot
+        # Show the operation
+        print(aumented_matrix)
         
+        # Create the 0s above and below the 1 created before
         for (j in 1:n) {
           if (j != i) {
+            # Get the number in the coloumn if is not in the principal diagonal
             item_in_pivot_column <- aumented_matrix[j,i]
             
+            # Operate the rows
             aumented_matrix[j,] <- aumented_matrix[j,] - (aumented_matrix[i,] * item_in_pivot_column)
+            
+            # Show the operation
+            print(aumented_matrix)
           }
         }
       }
